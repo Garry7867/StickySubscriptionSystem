@@ -60,7 +60,7 @@ const Navbar = () => {
                 md:dark:hover:text-blue-500 dark:hover:bg-gray-700
                 dark:hover:text-white md:dark:hover:bg-transparent"
               >
-                Contact
+                Contact Us
               </HashLink>
             </li>
             {/* <li>
