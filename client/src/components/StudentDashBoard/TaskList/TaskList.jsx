@@ -262,7 +262,7 @@ const TaskList = (props) => {
         <StudentNavbar />
       </div>
       <div className="flex flex-col m-2 justify-center items-center bg-[#9a9ab3]	">
-        <h2 className="text-white text-6xl font-extrabold text-center">
+        <h2 className="text-white text-6xl font-extrabold text-centre">
           My Subs
         </h2>
         <div className="flex flex-row justify-around items-center m-2">

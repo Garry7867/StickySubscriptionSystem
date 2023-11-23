@@ -3,6 +3,7 @@ const StudentLogin = require("../models/StudLogin.jsx");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Tasks = require("../models/Tasks.jsx");
+const Mailgen = require('mailgen');
 require("dotenv").config();
 const Authenticate = require("../middleware/Authenticate.jsx");
 // Create of token
@@ -153,7 +154,11 @@ exports.addTasks = async (req, res) => {
 };
 exports.editUser = async (req, res) => {
   try {
+   
     const { email, taskslist } = req.body;
+
+    console.log("taskslist: ", taskslist);
+
     if (!email) {
       return res.status(400).json({ error: "None of the fields can be empty" });
     }
@@ -168,6 +173,56 @@ exports.editUser = async (req, res) => {
     if (taskslist) {
       emailExists.taskslist = taskslist;
     }
+
+    function sendEmail(platformName, email) {
+      // Configure nodemailer with your email service provider details
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'stickysubscriptionsystem@gmail.com',
+          pass: 'sticky94176',
+        },
+      });
+    
+      // Email content
+      const mailOptions = {
+        from: 'your-email@gmail.com',
+        to: email,
+        subject: `Account Expiry Reminder for ${platformName}`,
+        text: `Your ${platformName} account is expiring within 24 hours. Please renew your subscription.`,
+      };
+    
+      // Send email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+    }
+
+    // Function to check and send emails
+function checkAndSendEmails() {
+  const now = new Date();
+
+  taskslist.forEach((task) => {
+    // Convert renew_date string to a Date object
+    const renewDate = new Date(task.renew_date);
+
+    // Calculate the time difference in milliseconds
+    const timeDifference = renewDate - now;
+
+    // Check if the renewal date is within the next 24 hours
+    if (timeDifference > 0 && timeDifference <= 24 * 60 * 60 * 1000) {
+      // Send email
+      sendEmail(task.platformName, 'recipient-email@example.com');
+    }
+  });
+}
+
+// Call the function to check and send emails
+checkAndSendEmails();
 
     const done = await emailExists.save();
     if (done) {
