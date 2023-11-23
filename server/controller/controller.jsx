@@ -188,8 +188,8 @@ exports.editUser = async (req, res) => {
       const mailOptions = {
         from: 'your-email@gmail.com',
         to: email,
-        subject: `Account Expiry Reminder for ${platformName}`,
-        text: `Your ${platformName} account is expiring within 24 hours. Please renew your subscription.`,
+        subject: `Account Expiry Reminder for ${curr_task}`,
+        text: `Your ${curr_task} account is expiring within 24 hours. Please renew your subscription.`,
       };
     
       // Send email
@@ -216,7 +216,7 @@ function checkAndSendEmails() {
     // Check if the renewal date is within the next 24 hours
     if (timeDifference > 0 && timeDifference <= 24 * 60 * 60 * 1000) {
       // Send email
-      sendEmail(task.platformName, 'recipient-email@example.com');
+      sendEmail(task.curr_task, 'recipient-email@example.com');
     }
   });
 }
